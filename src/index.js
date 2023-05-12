@@ -1,6 +1,11 @@
 require("dotenv").config();
 
-const { Client, IntentsBitField } = require("discord.js");
+const {
+  Client,
+  IntentsBitField,
+  EmbedBuilder,
+  InteractionResponse,
+} = require("discord.js");
 
 const client = new Client({
   intents: [
@@ -21,7 +26,16 @@ client.on("messageCreate", (message) => {
   }
 
   if (message.content === "hello") {
-    message.reply("Ahoy Warlord!");
+    message.reply(`Ahoy Warlord!`);
+  }
+
+  if (message.content === "rules") {
+    const rules = new EmbedBuilder()
+      .setTitle("Kingdom Rules.")
+      .setDescription("These are the rules of the server.")
+      .setColor("Random");
+
+    message.reply({ embeds: [rules] });
   }
 });
 
@@ -30,11 +44,46 @@ client.on("interactionCreate", (interaction) => {
   console.log(interaction.commandName);
 
   if (interaction.commandName === "hey") {
-    interaction.reply("Hey there warlord!!!");
+    interaction.reply(`Hey there Warlord ${interaction.user.username}!!!`);
   }
 
   if (interaction.commandName === "ping") {
     interaction.reply("Pong!");
+  }
+
+  if (interaction.commandName === "add") {
+    const num1 = interaction.options.get("first-number").value;
+    const num2 = interaction.options.get("second-number").value;
+
+    interaction.reply(`The sum is ${num1 + num2}.`);
+  }
+
+  if (interaction.commandName === "server") {
+    interaction.reply(
+      `This server is ${interaction.guild.name} and has ${interaction.guild.memberCount} Warlords.`
+    );
+  }
+
+  if (interaction.commandName === "member") {
+    interaction.reply(
+      `This command was run by ${interaction.user.username}, who joined ${interaction.member.joinedAt}.`
+    );
+  }
+
+  if (interaction.commandName === "rules") {
+    const rules = new EmbedBuilder()
+      .setTitle("Kingdom Rules.")
+      .setDescription("These are the rules of the server.")
+      .setColor("Random")
+      .addFields({ name: "Regular Field title", value: "Some text here" })
+      .setThumbnail("https://i.imgur.com/AfFp7pu.png")
+      .setImage("https://i.imgur.com/AfFp7pu.png")
+      .setTimestamp()
+      .setFooter({
+        text: "Maintained by Gypsy. All rights reserved.",
+        iconURL: "https://i.imgur.com/AfFp7pu.png",
+      });
+    interaction.reply({ embeds: [rules] });
   }
 });
 
