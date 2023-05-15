@@ -4,6 +4,7 @@ const {
   Client,
   IntentsBitField,
   EmbedBuilder,
+  ActivityType,
   InteractionResponse,
 } = require("discord.js");
 
@@ -16,8 +17,31 @@ const client = new Client({
   ],
 });
 
+let status = [
+  {
+    name: "PUBG MOBILE",
+    type: ActivityType.Watching,
+    url: "https://youtu.be/EfvaKKAQbiw",
+  },
+  {
+    name: "PUBG MOBILE",
+    type: ActivityType.Streaming,
+    url: "https://youtu.be/zR1hm4d-YTk",
+  },
+  {
+    name: "Lofi Girl",
+    type: ActivityType.Listening,
+    url: "https://open.spotify.com/playlist/1YIe34rcmLjCYpY9wJoM2p?si=a7087610c4304f4c",
+  },
+];
+
 client.on("ready", (c) => {
-  console.log(`${c.user.tag} is online`);
+  console.log(`✅ ${c.user.tag} is online`);
+
+  setInterval(() => {
+    const random = Math.floor(Math.random() * status.length);
+    client.user.setActivity(status[random]);
+  }, 60000);
 });
 
 client.on("messageCreate", (message) => {
